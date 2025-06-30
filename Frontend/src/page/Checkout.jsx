@@ -3,6 +3,48 @@ import { CreditCard, Shield, MapPin } from "lucide-react"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import { useAppContext } from "../store/CartContext"
+import axios from "../axios";
+
+const handlePayment = async () => {
+  const token = localStorage.getItem("token"); // if you’re using auth
+
+  try {
+    const res = await axios.post("/api/payment/create-order", { amount: total }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    const { orderId, amount, currency } = res.data;
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: amount,
+      currency: currency,
+      name: "Style Sphere",
+      description: "Order Payment",
+      order_id: orderId,
+      handler: function (response) {
+        alert("Payment successful!");
+        console.log("Razorpay Response:", response);
+        // You can verify payment and create order in DB here
+      },
+      prefill: {
+        name: "arpit",
+        email: "rj@gmail.com", // get from user data
+        contact: "987654321",
+      },
+      theme: {
+        color: "#ec4899",
+      },
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+  } catch (error) {
+    console.error("Payment initiation failed", error);
+    alert("Payment initiation failed. Please try again.");
+  }
+};
+
 
 export default function CheckoutPage() {
   const { cartItems } = useAppContext()
@@ -58,9 +100,8 @@ export default function CheckoutPage() {
                 {addresses.map((address, index) => (
                   <div
                     key={address.id}
-                    className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-                      selectedAddress === index ? "border-pink-600 bg-pink-50" : "border-gray-200"
-                    }`}
+                    className={`border rounded-lg p-4 cursor-pointer transition-colors ${selectedAddress === index ? "border-pink-600 bg-pink-50" : "border-gray-200"
+                      }`}
                     onClick={() => setSelectedAddress(index)}
                   >
                     <div className="flex items-start justify-between">
@@ -178,8 +219,11 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <button className="w-full bg-pink-600 text-white py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors mb-4">
-                Place Order
+              <button
+                onClick={handlePayment}
+                className="w-full bg-pink-600 text-white py-3 rounded-lg font-medium hover:bg-pink-700 transition-colors mb-4"
+              >
+                Pay ₹{total} with Razorpay
               </button>
 
               <div className="flex items-center justify-center text-sm text-gray-500">
