@@ -5,6 +5,41 @@ import Footer from "../components/Footer"
 import { useAppContext } from "../store/CartContext"
 import axios from "../axios";
 
+
+
+export default function CheckoutPage() {
+  const { cartItems } = useAppContext()
+  const [selectedAddress, setSelectedAddress] = useState(0)
+  const [paymentMethod, setPaymentMethod] = useState("card")
+  const [showAddAddress, setShowAddAddress] = useState(false)
+
+  const addresses = [
+    {
+      id: 1,
+      name: "Arpit Sharma",
+      phone: "+91 9876543210",
+      address: "123 Main Street, Apartment 4B",
+      city: "Mumbai",
+      state: "Maharashtra",
+      pincode: "400001",
+      type: "Home",
+    },
+    {
+      id: 2,
+      name: "Shivangi Singh",
+      phone: "+91 9876543210",
+      address: "456 Business Park, Office 201",
+      city: "Mumbai",
+      state: "Maharashtra",
+      pincode: "400002",
+      type: "Office",
+    },
+  ]
+
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const shipping = subtotal > 1999 ? 0 : 99
+  const total = subtotal + shipping
+
 const handlePayment = async () => {
   const token = localStorage.getItem("token"); // if you’re using auth
 
@@ -45,39 +80,6 @@ const handlePayment = async () => {
   }
 };
 
-
-export default function CheckoutPage() {
-  const { cartItems } = useAppContext()
-  const [selectedAddress, setSelectedAddress] = useState(0)
-  const [paymentMethod, setPaymentMethod] = useState("card")
-  const [showAddAddress, setShowAddAddress] = useState(false)
-
-  const addresses = [
-    {
-      id: 1,
-      name: "Arpit Sharma",
-      phone: "+91 9876543210",
-      address: "123 Main Street, Apartment 4B",
-      city: "Mumbai",
-      state: "Maharashtra",
-      pincode: "400001",
-      type: "Home",
-    },
-    {
-      id: 2,
-      name: "Shivangi Singh",
-      phone: "+91 9876543210",
-      address: "456 Business Park, Office 201",
-      city: "Mumbai",
-      state: "Maharashtra",
-      pincode: "400002",
-      type: "Office",
-    },
-  ]
-
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shipping = subtotal > 1999 ? 0 : 99
-  const total = subtotal + shipping
 
   return (
     <div className="min-h-screen bg-gray-50">
