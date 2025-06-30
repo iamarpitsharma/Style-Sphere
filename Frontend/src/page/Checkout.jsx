@@ -5,8 +5,6 @@ import Footer from "../components/Footer"
 import { useAppContext } from "../store/CartContext"
 import axios from "../axios";
 
-
-
 export default function CheckoutPage() {
   const { cartItems } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(0)
