@@ -7,7 +7,7 @@ const app = express();
 
 // Middleware
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173','https://style-sphere-blond.vercel.app/'],
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -46,7 +46,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/admin/categories', require('./routes/category'));
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 }); 
