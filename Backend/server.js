@@ -31,6 +31,11 @@ mongoose.connect(mongoURI)
 app.use("/api/auth/profile", require("./routes/profile"));
 app.use("/api/user", require("./routes/profile"));
 
+app.get('/api/test', (req, res) => {
+  res.json({ success: true, message: "Backend working!" });
+});
+
+
 
 // Public routes (no authentication required)
 app.use('/api/products', require('./routes/products'));
