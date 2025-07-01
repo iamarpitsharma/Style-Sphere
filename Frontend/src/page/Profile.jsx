@@ -148,7 +148,7 @@ export default function ProfilePage() {
   //   { id: 2, type: "Office", name: "Arpit Sharma", address: "456 Business Park, Office 201", city: "Mumbai", state: "Maharashtra", pincode: "400002", phone: "+91 9876543210", isDefault: false },
   // ];
 
-  const addresses = profileData.addresses || [],
+  const addresses = profileData.addresses || [];
 
   // const wishlistItems = [
   //   { id: 1, name: "Denim Jacket Premium", brand: "UrbanWear", price: 2499, originalPrice: 3999, image: "/placeholder.svg", inStock: true },
