@@ -2,32 +2,32 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
+const path = require('path');
 const app = express();
 
 // Middleware
 const corsOptions = {
-  origin: ['http://localhost:5173','https://style-sphere-blond.vercel.app'],
+  origin: ['http://localhost:5173', 'https://style-sphere-blond.vercel.app'],
   credentials: true,
 };
 app.use(cors(corsOptions));
 app.use(express.json());
 
 // Connect to MongoDB
-const mongoURI = process.env.MONGO_URI ;
+const mongoURI = process.env.MONGO_URI;
 mongoose.connect(mongoURI)
-.then(() => console.log('MongoDB connected'))
+  .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
-  
-  // Routes
-  app.get('/', (req, res) => {
-    res.send('API is running');
-  });
-  const wishlistRoutes = require("./routes/wishlist");
-  app.use("/api/wishlist", wishlistRoutes);
-  
-  const orderRoutes = require("./routes/order");
-  app.use("/api/orders", orderRoutes);
+
+// Routes
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
+const wishlistRoutes = require("./routes/wishlist");
+app.use("/api/wishlist", wishlistRoutes);
+
+const orderRoutes = require("./routes/order");
+app.use("/api/orders", orderRoutes);
 app.use("/api/auth/profile", require("./routes/profile"));
 app.use("/api/user", require("./routes/profile"));
 
