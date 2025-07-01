@@ -35,7 +35,8 @@ app.get('/api/test', (req, res) => {
   res.json({ success: true, message: "Backend working!" });
 });
 
-
+// Serve uploaded images statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Public routes (no authentication required)
 app.use('/api/products', require('./routes/products'));

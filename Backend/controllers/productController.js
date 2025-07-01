@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Product = require("../models/Product");
 
 const safeJsonParse = (value, defaultValue) => {
@@ -11,32 +12,39 @@ const safeJsonParse = (value, defaultValue) => {
 
 
 exports.createProduct = async (req, res) => {
-    try {
-      console.log("req.body:", req.body);
-console.log("req.files:", req.files);
+  try {
+    console.log("req.body:", req.body);
+    console.log("req.files:", req.files);
 
     const body = req.body;
     const images = [];
 
+    const baseUrl = process.env.BASE_URL || "http://localhost:5000"; // or your backend URL
+
     if (req.files?.length > 0) {
       req.files.forEach((file) => {
-        images.push({ url: `/uploads/${file.filename}` }); // assuming you use multer
+        images.push({ url: `${baseUrl}/uploads/${file.filename}` });
       });
     }
+    // if (req.files?.length > 0) {
+    //   req.files.forEach((file) => {
+    //     images.push({ url: `/uploads/${file.filename}` }); // assuming you use multer
+    //   });
+    // }
 
     const parsedData = {
-  ...body,
-  price: Number(body.price),
-  originalPrice: Number(body.originalPrice),
-  colors: safeJsonParse(body.colors, []),
-  sizes: safeJsonParse(body.sizes, []),
-  tags: safeJsonParse(body.tags, []),
-  specifications: safeJsonParse(body.specifications, {}),
-  features: safeJsonParse(body.features, []),
-  images,
-totalStock: safeJsonParse(body.colors, []).reduce((acc, color) => acc + Number(color.stock || 0), 0),
-};  
-      
+      ...body,
+      price: Number(body.price),
+      originalPrice: Number(body.originalPrice),
+      colors: safeJsonParse(body.colors, []),
+      sizes: safeJsonParse(body.sizes, []),
+      tags: safeJsonParse(body.tags, []),
+      specifications: safeJsonParse(body.specifications, {}),
+      features: safeJsonParse(body.features, []),
+      images,
+      totalStock: safeJsonParse(body.colors, []).reduce((acc, color) => acc + Number(color.stock || 0), 0),
+    };
+
     const product = await Product.create(parsedData);
     res.status(201).json({ success: true, data: product });
   } catch (err) {

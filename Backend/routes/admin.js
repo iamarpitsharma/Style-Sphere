@@ -5,8 +5,22 @@ const adminController = require("../controllers/adminController");
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware")
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+// const upload = multer({ dest: 'uploads/' });
 const { updateProduct } = require("../controllers/adminController");
+
+const path = require('path');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);  // get original file extension
+    cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + ext);
+  }
+});
+
+const upload = multer({ storage });
 
 router.put("/products/:id", authMiddleware,   upload.array("images", 5),
  updateProduct);
