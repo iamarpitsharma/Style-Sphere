@@ -26,7 +26,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
-      console.log("[DEBUG] Token in localStorage:", token);
+      // console.log("[DEBUG] Token in localStorage:", token);
       if (!token || token === "undefined" || token.length < 10) {
         toast.error("You are not logged in. Please login again.");
         logout();
@@ -34,13 +34,13 @@ export default function ProfilePage() {
         return;
       }
       try {
-        console.log("[DEBUG] Authorization header:", `Bearer ${token}`);
+        // console.log("[DEBUG] Authorization header:", `Bearer ${token}`);
         const res = await axios.get("/api/auth/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("[DEBUG] Profile fetched from backend:", res.data.user);
+        // console.log("[DEBUG] Profile fetched from backend:", res.data.user);
         setProfileData(res.data.user);
       } catch (err) {
         toast.error("Session expired or unauthorized. Please login again.");
@@ -96,7 +96,7 @@ export default function ProfilePage() {
 
   // Early return to avoid rendering UI when profileData not loaded
   if (!profileData || !profileData.firstName) {
-    console.log("[DEBUG] profileData is not ready:", profileData);
+    // console.log("[DEBUG] profileData is not ready:", profileData);
     return <div className="text-center py-10 text-gray-600">Loading profile...</div>;
   }
 
@@ -143,10 +143,12 @@ export default function ProfilePage() {
   //   { id: "#ORD-003", date: "2024-01-05", status: "Processing", total: "₹3,999", items: 3, image: "/placeholder.svg" },
   // ];
 
-  const addresses = [
-    { id: 1, type: "Home", name: "Arpit Sharma", address: "123 Main Street, Apartment 4B", city: "Mumbai", state: "Maharashtra", pincode: "400001", phone: "+91 9876543210", isDefault: true },
-    { id: 2, type: "Office", name: "Arpit Sharma", address: "456 Business Park, Office 201", city: "Mumbai", state: "Maharashtra", pincode: "400002", phone: "+91 9876543210", isDefault: false },
-  ];
+  // const addresses = [
+  //   { id: 1, type: "Home", name: "Arpit Sharma", address: "123 Main Street, Apartment 4B", city: "Mumbai", state: "Maharashtra", pincode: "400001", phone: "+91 9876543210", isDefault: true },
+  //   { id: 2, type: "Office", name: "Arpit Sharma", address: "456 Business Park, Office 201", city: "Mumbai", state: "Maharashtra", pincode: "400002", phone: "+91 9876543210", isDefault: false },
+  // ];
+
+  const addresses = profileData.addresses || [],
 
   // const wishlistItems = [
   //   { id: 1, name: "Denim Jacket Premium", brand: "UrbanWear", price: 2499, originalPrice: 3999, image: "/placeholder.svg", inStock: true },
@@ -305,6 +307,38 @@ export default function ProfilePage() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 disabled:bg-gray-50"
                       />
                     </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">User Type</label>
+                      <input
+                        type="text"
+                        value={profileData.userType || "individual"}
+                        disabled
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email Verified</label>
+                      <input
+                        type="text"
+                        value={profileData.isEmailVerified ? "Yes" : "No"}
+                        disabled
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Account Status</label>
+                      <input
+                        type="text"
+                        value={profileData.isActive ? "Active" : "Inactive"}
+                        disabled
+                        className={`w-full px-3 py-2 border border-gray-300 rounded-lg ${profileData.isActive ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}
+                      />
+                    </div>
+                  </div>
                   </div>
                 </div>
               )}
