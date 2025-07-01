@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import toast from "react-hot-toast";
 import { useAppContext } from "../store/CartContext";
-import { 
-  Search, 
-  ShoppingBag, 
-  Heart, 
-  User, 
-  Menu, 
-  X, 
-  ChevronDown, 
-  LogOut, 
-  Settings, 
-  Package, 
-  BarChart3, 
+import {
+  Search,
+  ShoppingBag,
+  Heart,
+  User,
+  Menu,
+  X,
+  ChevronDown,
+  LogOut,
+  Settings,
+  Package,
+  BarChart3,
   Bell,
   MessageCircle,
   MapPin,
@@ -40,11 +41,11 @@ const Header = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  
+
   const { authUser, logout } = useAuth();
   const [userRole, setUserRole] = useState("user");
   const { cartItems, wishlistItems } = useAppContext();
-  
+
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
   const notificationRef = useRef(null);
@@ -205,7 +206,7 @@ const Header = () => {
       const updated = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
       setRecentSearches(updated);
       localStorage.setItem("recentSearches", JSON.stringify(updated));
-      
+
       // Navigate to search results
       navigate(`/search?q=${encodeURIComponent(query)}`);
       setShowSearchResults(false);
@@ -225,8 +226,8 @@ const Header = () => {
   };
 
   const markNotificationAsRead = (id) => {
-    setNotifications(prev => 
-      prev.map(notif => 
+    setNotifications(prev =>
+      prev.map(notif =>
         notif.id === id ? { ...notif, read: true } : notif
       )
     );
@@ -235,9 +236,8 @@ const Header = () => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <header className={`bg-white shadow-md sticky top-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'shadow-lg backdrop-blur-sm bg-white/95' : ''
-    }`}>
+    <header className={`bg-white shadow-md sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-lg backdrop-blur-sm bg-white/95' : ''
+      }`}>
       <div className="container mx-auto px-4">
         {/* Top Bar */}
         <div className="flex items-center justify-between py-4">
@@ -259,11 +259,10 @@ const Header = () => {
                     }
                   }}
                   onKeyPress={(e) => e.key === 'Enter' && handleSearch(searchQuery)}
-                  className={`w-full px-4 py-3 pl-12 border-2 rounded-xl transition-all duration-200 ${
-                    isSearchFocused 
-                      ? 'border-pink-500 shadow-lg shadow-pink-500/20' 
+                  className={`w-full px-4 py-3 pl-12 border-2 rounded-xl transition-all duration-200 ${isSearchFocused
+                      ? 'border-pink-500 shadow-lg shadow-pink-500/20'
                       : 'border-gray-200 hover:border-gray-300'
-                  } focus:outline-none`}
+                    } focus:outline-none`}
                 />
                 <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
                 <button
@@ -286,7 +285,7 @@ const Header = () => {
                               <Clock className="h-4 w-4 mr-2" />
                               Recent Searches
                             </h3>
-                            <button 
+                            <button
                               onClick={() => {
                                 setRecentSearches([]);
                                 localStorage.removeItem("recentSearches");
@@ -309,7 +308,7 @@ const Header = () => {
                           </div>
                         </div>
                       )}
-                      
+
                       <div>
                         <h3 className="text-sm font-semibold text-gray-700 flex items-center mb-2">
                           <TrendingUp className="h-4 w-4 mr-2" />
@@ -338,10 +337,10 @@ const Header = () => {
                           onClick={() => handleProductClick(product)}
                           className="flex items-center w-full p-4 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 text-left transition-colors"
                         >
-                          <img 
-                            src={product.image} 
-                            alt={product.name} 
-                            className="w-16 h-16 object-cover rounded-lg mr-4 bg-gray-100" 
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-16 h-16 object-cover rounded-lg mr-4 bg-gray-100"
                           />
                           <div className="flex-1 min-w-0">
                             <h4 className="font-medium text-gray-900 truncate">{product.name}</h4>
@@ -422,14 +421,12 @@ const Header = () => {
                             <button
                               key={notification.id}
                               onClick={() => markNotificationAsRead(notification.id)}
-                              className={`w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-50 last:border-b-0 ${
-                                !notification.read ? 'bg-blue-50' : ''
-                              }`}
+                              className={`w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-50 last:border-b-0 ${!notification.read ? 'bg-blue-50' : ''
+                                }`}
                             >
                               <div className="flex items-start">
-                                <div className={`w-2 h-2 rounded-full mt-2 mr-3 ${
-                                  !notification.read ? 'bg-blue-500' : 'bg-gray-300'
-                                }`} />
+                                <div className={`w-2 h-2 rounded-full mt-2 mr-3 ${!notification.read ? 'bg-blue-500' : 'bg-gray-300'
+                                  }`} />
                                 <div className="flex-1">
                                   <h4 className="font-medium text-gray-900">{notification.title}</h4>
                                   <p className="text-sm text-gray-600">{notification.message}</p>
@@ -479,7 +476,7 @@ const Header = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="py-2">
                         <Link to="/profile" className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors">
                           <User className="h-4 w-4 mr-3 text-gray-500" />
@@ -516,21 +513,19 @@ const Header = () => {
                         <div className="flex space-x-2">
                           <button
                             onClick={() => switchRole("user")}
-                            className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                              userRole === "user" 
-                                ? "bg-pink-100 text-pink-700 border border-pink-200" 
+                            className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${userRole === "user"
+                                ? "bg-pink-100 text-pink-700 border border-pink-200"
                                 : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                            }`}
+                              }`}
                           >
                             User
                           </button>
                           <button
                             onClick={() => switchRole("admin")}
-                            className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                              userRole === "admin" 
-                                ? "bg-pink-100 text-pink-700 border border-pink-200" 
+                            className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${userRole === "admin"
+                                ? "bg-pink-100 text-pink-700 border border-pink-200"
                                 : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                            }`}
+                              }`}
                           >
                             Admin
                           </button>
@@ -548,7 +543,10 @@ const Header = () => {
 
                       <div className="border-t border-gray-100 py-2">
                         <button
-                          onClick={logout}
+                          onClick={() => {
+                            logout(); // call logout from useAuth()
+                            toast.success("Logged out successfully!"); // show toast
+                          }}
                           className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50 transition-colors"
                         >
                           <LogOut className="h-4 w-4 mr-3" />
@@ -561,8 +559,8 @@ const Header = () => {
               </>
             ) : (
               <div className="flex items-center space-x-3">
-                <Link 
-                  to="/login" 
+                <Link
+                  to="/login"
                   className="text-gray-700 hover:text-pink-600 font-medium text-sm transition-colors"
                 >
                   Login
@@ -598,8 +596,8 @@ const Header = () => {
             </Link>
 
             {/* Mobile Menu Toggle */}
-            <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -617,11 +615,10 @@ const Header = () => {
               { name: "SALE", path: "/products?category=sale", color: "text-red-600 hover:text-red-700" }
             ].map((item) => (
               <li key={item.name}>
-                <Link 
-                  to={item.path} 
-                  className={`${item.color} font-medium transition-all duration-200 relative group ${
-                    location.pathname === item.path ? 'text-pink-600' : ''
-                  }`}
+                <Link
+                  to={item.path}
+                  className={`${item.color} font-medium transition-all duration-200 relative group ${location.pathname === item.path ? 'text-pink-600' : ''
+                    }`}
                 >
                   {item.name}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-pink-600 transition-all duration-200 group-hover:w-full" />
@@ -656,8 +653,8 @@ const Header = () => {
                 { name: "SALE", path: "/products?category=sale" }
               ].map((item) => (
                 <li key={item.name}>
-                  <Link 
-                    to={item.path} 
+                  <Link
+                    to={item.path}
                     className="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 font-medium transition-all rounded-lg"
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -671,16 +668,16 @@ const Header = () => {
             {authUser && (
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <div className="flex items-center space-x-4">
-                  <Link 
-                    to="/wishlist" 
+                  <Link
+                    to="/wishlist"
                     className="flex items-center space-x-2 text-gray-700 hover:text-pink-600 transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <Heart className="h-5 w-5" />
                     <span>Wishlist ({wishlistItems.length})</span>
                   </Link>
-                  <Link 
-                    to="/cart" 
+                  <Link
+                    to="/cart"
                     className="flex items-center space-x-2 text-gray-700 hover:text-pink-600 transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -696,12 +693,12 @@ const Header = () => {
 
       {/* Search Overlay for Mobile */}
       {showSearchResults && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40" 
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => {
             setShowSearchResults(false);
             setIsSearchFocused(false);
-          }} 
+          }}
         />
       )}
     </header>
