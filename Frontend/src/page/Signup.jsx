@@ -38,19 +38,42 @@ export default function SignupPage() {
       return;
     }
     try {
-      const response = await axios.post("/api/auth/signup", {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        password: formData.password,
-        userType: formData.userType,
-      });
+      console.log("Signup Request Data →", {
+  firstName: formData.firstName,
+  lastName: formData.lastName,
+  email: formData.email,
+  phone: formData.phone,
+  password: formData.password,
+  userType: formData.userType,
+});
+
+      const payload = {
+  firstName: formData.firstName.trim(),
+  lastName: formData.lastName.trim(),
+  email: formData.email.trim().toLowerCase(),
+  phone: formData.phone.trim(),
+  password: formData.password,
+  userType: formData.userType,
+};
+
+console.log("Signup Payload →", payload);
+
+const response = await axios.post("/api/auth/signup", payload);
+      // const response = await axios.post("/api/auth/signup", {
+      //   firstName: formData.firstName,
+      //   lastName: formData.lastName,
+      //   email: formData.email,
+      //   phone: formData.phone,
+      //   password: formData.password,
+      //   userType: formData.userType,
+      // });
       setAuthUser(response.data.user);
       localStorage.setItem("token", response.data.token);
       toast.success("Signup successful!");
       navigate("/profile");
     } catch (error) {
+      console.log("Signup Error →", error.response?.data || error.message || error);
+
       toast.error(
         error.response?.data?.message ||
         "Signup failed"
